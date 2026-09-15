@@ -1,0 +1,102 @@
+{
+  "name": "Monitor Report Errors",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f0a10c47-f1b2-4b60-af62-d99b33190126",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "188fab44-1fb2-4576-a07b-c71ebbf14384",
+              "name": "content",
+              "value": "=[72555fdeff7c7d5c2ce5b845a2289ac3] Workflow Error Alert - Workflow: {{ $json.workflow.name }} | Error: {{ $json.execution.error.message }} | Last node: {{ $json.execution.lastNodeExecuted }} | Execution URL: {{ $json.execution.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "2e15869c-fa48-43a8-8776-b8fc223fffd9",
+      "name": "Build Error Message"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "={{ $json.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "65172b33-d332-45e9-9b72-9e2ba02a6a1e",
+      "name": "Notify Discord",
+      "webhookId": "195f431e-8ea1-495d-95f5-ece5064db59d",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "W4Gsn3t8bw95kVAd",
+          "name": "n8n Quickstart S2 Error Discord Webhook account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Build Error Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Error Message": {
+      "main": [
+        [
+          {
+            "node": "Notify Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "e9572cc8-ce57-4540-98fb-f1b75df490d4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cab0e3945cdd462e8d4034a7eb3311088264f2006727022f0dc3c11d3dc601b3"
+  },
+  "nodeGroups": [],
+  "id": "7PMDWaEiA3IaXWk7",
+  "tags": []
+}
