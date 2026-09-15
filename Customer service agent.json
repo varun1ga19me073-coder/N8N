@@ -1,0 +1,195 @@
+{
+  "name": "Customer service agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "282daba8-13ee-4bae-bd01-85e3fde12b62",
+      "name": "When chat message received",
+      "webhookId": "166dba12-4627-46af-b666-c89595328f4d"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a customer service agent for a small company. Be polite, concise, and helpful. If you do not know the answer, say so honestly rather than making something up."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "8eede1ec-a5d5-438e-b5ce-b466c8560ee4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "gpt-5-mini",
+          "cachedResultUrl": ""
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        208
+      ],
+      "id": "feb5966b-24dc-4545-9191-13e1d8c6391f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "4Ad355ViHdoGhVSM",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "ZTdHPTIhndFBweyi",
+          "mode": "list",
+          "cachedResultName": "customers",
+          "cachedResultUrl": "/projects/ZMPhSEjtq7lfQMXL/datatables/ZTdHPTIhndFBweyi"
+        }
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        384,
+        208
+      ],
+      "id": "97cbc0d0-ce53-43de-b58a-1279eb50a9fb",
+      "name": "Getcustomer"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Retrieve order details including order prices, quantities, product categories, employee assignments, and order statuses for all customers",
+        "url": "https://learn.app.n8n.cloud/webhook/courses/n8n-quickstart/order-tool",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Assessment-ID",
+              "value": "72555fdeff7c7d5c2ce5b845a2289ac3"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.5,
+      "position": [
+        480,
+        304
+      ],
+      "id": "c62cd948-daf1-4e89-94b1-08c2ca29277a",
+      "name": "Getorderdata",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "H0vJc0xslyVD6cW1",
+          "name": "n8n Quickstart Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        208
+      ],
+      "id": "1d97c0bb-af0e-486d-a0ec-d724f326a5b9",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Getcustomer": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Getorderdata": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "23330821-f5af-4d24-bb63-1359a3f52db0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cab0e3945cdd462e8d4034a7eb3311088264f2006727022f0dc3c11d3dc601b3"
+  },
+  "nodeGroups": [],
+  "id": "HiHY0eMhtttS1Lob",
+  "tags": []
+}
